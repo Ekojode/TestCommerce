@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema;
-const ObjectId = productSchema.ObjectId;
+const ObjectId = productSchema.Types.ObjectId;
 
 const Product = new productSchema({
-  _id: ObjectId,
+   _id: ObjectId,
   name: String,
   price: Number,
   description: String,

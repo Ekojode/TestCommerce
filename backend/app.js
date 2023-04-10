@@ -11,23 +11,16 @@ const app = express();
 
 mongoose.connect(mongoConnection).then(() => console.log("Connected!"));
 
-function delayMiddleware(req, res, next) {
-  setTimeout(() => {
-    next();
-  }, 2500);
-}
-
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(delayMiddleware);
 
 app.use("/products", productRoutes);
 
 app.use("/orders", orderRoutes);
 
 app.use((req, res, next) => {
-  const error = new Error("Test commerce ");
+  const error = new Error("An error occurred");
   error.status = 404;
   next(error);
 });
