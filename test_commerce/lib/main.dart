@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+import 'utilities/utilities.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -51,13 +54,20 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FutureBuilder(
-                future: dio.get('http://192.168.1.86/'),
+                future: dio.get('http://192.168.2.127/products'),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else {
                     final response = snapshot.data!.data;
-                    return Text(response['message']);
+                    return ElevatedButton(
+                        onPressed: () {
+                          debugPrint(response.toString());
+                        },
+                        child: Text(
+                          'Print response',
+                          style: AppTextStyle.boldText16(context),
+                        ));
                   }
                 }),
             const Text(

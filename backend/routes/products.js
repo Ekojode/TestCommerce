@@ -7,10 +7,18 @@ const products = require("../models/products");
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  res.status(200).json({
-    message: "Products gotten successfull",
-    data: ["product 1", "product 2", "product 3"],
-  });
+  ProductModel.find()
+    .then((products) => {
+      res.status(200).json({
+        message: true,
+        products: products,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: err,
+      });
+    });
 });
 
 router.get("/:productId", async (req, res, next) => {
