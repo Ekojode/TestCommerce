@@ -16,7 +16,7 @@ class AppNetworkImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(hasCircularBorder! ? 12 : 0),
+      borderRadius: BorderRadius.circular(hasCircularBorder! ? 10 : 0),
       child: CachedNetworkImage(
         key: UniqueKey(),
         imageUrl: imgUrl,

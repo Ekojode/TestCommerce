@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dimension_utils.dart';
+import '../utilities/utilities.dart';
 
 class AppTextStyle {
   static TextStyle regularText32(BuildContext context) =>
@@ -67,6 +67,6 @@ TextStyle appTextStyle(
   return TextStyle(
     fontWeight: fontWeight,
     fontSize: AppDimensions.calculateTextSize(context, fontSize),
-    fontStyle: FontStyle.normal,
+    color: AppColors.textBlack,
   );
 }

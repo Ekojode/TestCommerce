@@ -14,6 +14,9 @@ class AppDimensions {
       EdgeInsets.symmetric(
           vertical: height(context) * 0.015, horizontal: width(context) * 0.04);
 
+  static horizontalPadding(BuildContext context) =>
+      EdgeInsets.symmetric(horizontal: width(context) * 0.04);
+
   static double calculateTextSize(BuildContext context, double fontSize) {
     final scaleFactor = width(context) / baseScreenWidth;
     final calculatedFontSize = fontSize * scaleFactor;

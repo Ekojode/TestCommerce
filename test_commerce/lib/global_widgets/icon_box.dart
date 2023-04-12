@@ -35,9 +35,7 @@ class IconBox extends StatelessWidget {
             ),
           ),
           SizedBox(height: AppDimensions.height(context) * 0.0075),
-          Text(text,
-              style: AppTextStyle.regularText14(context)
-                  .copyWith(color: AppColors.textBlack)),
+          Text(text, style: AppTextStyle.regularText14(context)),
         ],
       ),
     );

@@ -19,8 +19,7 @@ class RowHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTextStyle.mediumText16(context)
-              .copyWith(color: AppColors.textBlack),
+          style: AppTextStyle.mediumText16(context),
         ),
         TextButton(
             onPressed: onPressed,
