@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
+import '../data/models/product_model.dart';
 import '../global_widgets/widgets.dart';
 import '../utilities/utilities.dart';
 
 class ProductWidget extends StatelessWidget {
-  const ProductWidget({super.key});
+  final ProductModel product;
+  const ProductWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +26,18 @@ class ProductWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppNetworkImageWidget(
-                imgUrl:
+                imgUrl: product.image ??
                     'https://content.asos-media.com/-/media/hubs/about-us/about-asos/feb-update/about-asos-1-new-size-asos_brands.jpg',
                 width: AppDimensions.width(context) * 0.4,
                 height: AppDimensions.width(context) * 0.4,
                 hasCircularBorder: true,
               ),
               SizedBox(height: AppDimensions.height(context) * 0.025),
-              Text('TMA-2 HD Wireless',
+              Text(product.name ?? '',
                   style: AppTextStyle.mediumText14(context)),
               SizedBox(height: AppDimensions.height(context) * 0.01),
               Text(
-                'Rp. 1.500.000',
+                'NGN ${product.price ?? 0}',
                 style: AppTextStyle.boldText12(context)
                     .copyWith(color: AppColors.redVelvet),
               ),

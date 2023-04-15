@@ -9,6 +9,9 @@
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
+import '../data/api/api_provider.dart';
+import '../data/api/app_repository.dart';
+
 final locator = StackedLocator.instance;
 
 Future<void> setupLocator({
@@ -21,4 +24,6 @@ Future<void> setupLocator({
 
 // Register dependencies
   locator.registerLazySingleton(() => NavigationService());
+  locator.registerLazySingleton(() => Api());
+  locator.registerLazySingleton(() => AppRepositoryService());
 }

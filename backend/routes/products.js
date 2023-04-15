@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const ProductModel = require("../models/products");
-const products = require("../models/products");
 
 const router = express.Router();
 
@@ -10,13 +9,15 @@ router.get("/", (req, res, next) => {
   ProductModel.find()
     .then((products) => {
       res.status(200).json({
-        message: true,
-        products: products,
+        isSuccessful: true,
+        message: "Products retrieved successfully",
+        data: products,
       });
     })
     .catch((err) => {
       res.status(500).json({
-        message: err,
+        isSuccessful: false,
+        message: err.message,
       });
     });
 });
@@ -27,11 +28,22 @@ router.get("/:productId", async (req, res, next) => {
   try {
     const product = await ProductModel.findById(prodId);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({
+        isSuccessful: false,
+
+        message: "Product not found",
+      });
     }
-    res.status(200).json(product);
+    res.status(200).json({
+      isSuccessful: true,
+      message: "Product retrieved successfuly",
+      data: product,
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      isSuccessful: false,
+      message: err.message,
+    });
   }
 });
 
@@ -41,15 +53,20 @@ router.get("/category/:category", (req, res) => {
   ProductModel.find({ category: category })
     .then((products) => {
       if (products.length === 0) {
-        res.status(404).json({ message: "No products found in this category" });
+        res.status(404).json({
+          isSuccessful: false,
+          message: "No products found in this category",
+        });
       }
       res.status(200).json({
+        isSuccessful: true,
         message: "Successful",
         products: products,
       });
     })
     .catch((err) => {
       res.status(500).json({
+        isSuccessful: false,
         message: err.message,
       });
     });
@@ -57,11 +74,32 @@ router.get("/category/:category", (req, res) => {
 
 router.patch("/:productId", (req, res, next) => {
   const prodId = req.params.productId;
+  const newProdData = req.body;
 
-  res.status(200).json({
-    message: "Products updated successfull",
-    data: `you found ${prodId} and it has been updated successfully`,
-  });
+  ProductModel.findByIdAndUpdate(prodId, newProdData, {
+    new: true,
+    runValidators: true,
+  })
+    .then((product) => {
+      if (!product) {
+        res.status(404).json({
+          isSuccessful: false,
+          message: "No product found",
+        });
+      }
+      res.json({
+        isSuccessful: true,
+        message: "Product updated successfully",
+        data: product,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        isSuccessful: false,
+        message: error.message,
+        data: error,
+      });
+    });
 });
 
 router.post("", (req, res, next) => {
@@ -73,21 +111,31 @@ router.post("", (req, res, next) => {
     description: newProdData.description,
     category: newProdData.category,
     subCategory: newProdData.subCategory,
+    image: newProdData.image,
   });
 
   newProduct
     .save()
     .then((result) => {
+      if (!result) {
+        res.status(404).json({
+          isSuccessful: false,
+          message: "An error occurred",
+        });
+      }
       console.log(result);
+      res.status(201).json({
+        isSuccessful: true,
+        message: "Products created successfully",
+        data: result,
+      });
     })
     .catch((error) => {
-      console.log(error);
+      res.status(500).json({
+        isSuccessful: false,
+        message: error.message,
+      });
     });
-
-  res.status(201).json({
-    message: "Products created successfully",
-    products: newProduct,
-  });
 });
 
 module.exports = router;
