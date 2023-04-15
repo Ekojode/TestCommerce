@@ -8,3 +8,4 @@ export './custom_app_bar.dart';
 export './app_text_field.dart';
 export './app_loader.dart';
 export './product_row_list.dart';
+export './product_grid.dart';

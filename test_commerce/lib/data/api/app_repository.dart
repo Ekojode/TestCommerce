@@ -14,4 +14,12 @@ class AppRepositoryService {
     }
     return response;
   }
+
+  Future<ApiResponse> getProductsByCategory(String category) async {
+    final response = await _api.get('/products/category/$category');
+    if (response.isSuccessful) {
+      response.data = ProductModel.getProductList(response.data);
+    }
+    return response;
+  }
 }

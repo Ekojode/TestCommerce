@@ -22,7 +22,6 @@ class Api {
   Future<ApiResponse> get(String endpoint,
       {Map<String, dynamic>? queryParameters, CancelToken? cancelToken}) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,

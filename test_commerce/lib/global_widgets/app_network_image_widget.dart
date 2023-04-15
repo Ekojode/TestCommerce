@@ -20,6 +20,7 @@ class AppNetworkImageWidget extends StatelessWidget {
       child: CachedNetworkImage(
         key: UniqueKey(),
         imageUrl: imgUrl,
+        alignment: Alignment.topCenter,
         fit: BoxFit.cover,
         placeholder: (context, url) => const Center(
           child: CircularProgressIndicator(),

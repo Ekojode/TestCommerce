@@ -5,12 +5,13 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i9;
+import 'package:stacked_services/stacked_services.dart' as _i10;
 import 'package:test_commerce/modules/account/account_view.dart' as _i3;
 import 'package:test_commerce/modules/cart/cart_view.dart' as _i4;
+import 'package:test_commerce/modules/category/category_view.dart' as _i8;
 import 'package:test_commerce/modules/dashboard/dashboard_view.dart' as _i2;
 import 'package:test_commerce/modules/notifications/notifications_view.dart'
     as _i5;
@@ -30,6 +31,8 @@ class Routes {
 
   static const orderView = '/order-view';
 
+  static const categoryView = '/category-view';
+
   static const all = <String>{
     dashboardView,
     accountView,
@@ -37,6 +40,7 @@ class Routes {
     notificationsView,
     wishListView,
     orderView,
+    categoryView,
   };
 }
 
@@ -66,47 +70,60 @@ class StackedRouter extends _i1.RouterBase {
       Routes.orderView,
       page: _i7.OrderView,
     ),
+    _i1.RouteDef(
+      Routes.categoryView,
+      page: _i8.CategoryView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.DashboardView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.DashboardView(),
         settings: data,
         maintainState: false,
       );
     },
     _i3.AccountView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.AccountView(),
         settings: data,
         maintainState: false,
       );
     },
     _i4.CartView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.CartView(),
         settings: data,
         maintainState: false,
       );
     },
     _i5.NotificationsView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.NotificationsView(),
         settings: data,
         maintainState: false,
       );
     },
     _i6.WishListView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.WishListView(),
         settings: data,
         maintainState: false,
       );
     },
     _i7.OrderView: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.OrderView(),
+        settings: data,
+        maintainState: false,
+      );
+    },
+    _i8.CategoryView: (data) {
+      final args = data.getArgs<CategoryViewArguments>(nullOk: false);
+      return _i9.MaterialPageRoute<dynamic>(
+        builder: (context) =>
+            _i8.CategoryView(key: args.key, category: args.category),
         settings: data,
         maintainState: false,
       );
@@ -119,7 +136,23 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i9.NavigationService {
+class CategoryViewArguments {
+  const CategoryViewArguments({
+    this.key,
+    required this.category,
+  });
+
+  final _i9.Key? key;
+
+  final String category;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "category": "$category"}';
+  }
+}
+
+extension NavigatorStateExtension on _i10.NavigationService {
   Future<dynamic> navigateToDashboardView([
     int? routerId,
     bool preventDuplicates = true,
@@ -204,6 +237,23 @@ extension NavigatorStateExtension on _i9.NavigationService {
         transition: transition);
   }
 
+  Future<dynamic> navigateToCategoryView({
+    _i9.Key? key,
+    required String category,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.categoryView,
+        arguments: CategoryViewArguments(key: key, category: category),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
   Future<dynamic> replaceWithDashboardView([
     int? routerId,
     bool preventDuplicates = true,
@@ -282,6 +332,23 @@ extension NavigatorStateExtension on _i9.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.orderView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithCategoryView({
+    _i9.Key? key,
+    required String category,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.categoryView,
+        arguments: CategoryViewArguments(key: key, category: category),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

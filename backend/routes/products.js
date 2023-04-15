@@ -61,7 +61,7 @@ router.get("/category/:category", (req, res) => {
       res.status(200).json({
         isSuccessful: true,
         message: "Successful",
-        products: products,
+        data: products,
       });
     })
     .catch((err) => {

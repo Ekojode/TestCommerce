@@ -65,28 +65,38 @@ class HomeView extends StatelessWidget {
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   physics: const BouncingScrollPhysics(),
-                                  children: const [
+                                  children: [
                                     IconBox(
+                                        onPressed: () =>
+                                            model.navigateToCategory('food'),
                                         text: 'Food',
                                         color: AppColors.lightGreen,
                                         image:
                                             'assets/icons/category/vegetable.svg'),
                                     IconBox(
+                                        onPressed: () =>
+                                            model.navigateToCategory('gift'),
                                         text: 'Gift',
                                         color: AppColors.lightOrange,
                                         image:
                                             'assets/icons/category/fruit.svg'),
                                     IconBox(
+                                        onPressed: () =>
+                                            model.navigateToCategory('fashion'),
                                         text: 'Fashion',
                                         color: AppColors.lightYellow,
                                         image:
                                             'assets/icons/category/eggs.svg'),
                                     IconBox(
+                                        onPressed: () =>
+                                            model.navigateToCategory('gadget'),
                                         text: 'Gadget',
                                         color: AppColors.lightPurple,
                                         image:
                                             'assets/icons/category/meat.svg'),
                                     IconBox(
+                                        onPressed: () => model
+                                            .navigateToCategory('computers'),
                                         text: 'Computers',
                                         color: AppColors.lightGreen,
                                         image:
