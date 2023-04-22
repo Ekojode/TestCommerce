@@ -26,15 +26,18 @@ class ProductWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppNetworkImageWidget(
-                imgUrl: product.image ??
-                    'https://content.asos-media.com/-/media/hubs/about-us/about-asos/feb-update/about-asos-1-new-size-asos_brands.jpg',
+                imgUrl: product.image,
                 width: AppDimensions.width(context) * 0.4,
                 height: AppDimensions.width(context) * 0.4,
                 hasCircularBorder: true,
               ),
               SizedBox(height: AppDimensions.height(context) * 0.025),
-              Text(product.name ?? '',
-                  style: AppTextStyle.mediumText14(context)),
+              Text(
+                product.name ?? '',
+                style: AppTextStyle.mediumText14(context),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
               SizedBox(height: AppDimensions.height(context) * 0.01),
               Text(
                 'NGN ${product.price ?? 0}',

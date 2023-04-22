@@ -35,31 +35,42 @@ class CategoryView extends StatelessWidget {
                 )
               ],
               leadingAction: () => model.navigationService.back()),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: AppDimensions.screenPadding(context),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: AppDimensions.width(context)),
-                    Text(category.capitalizeFirst,
-                        style: AppTextStyle.boldText24(context)),
-                    SizedBox(height: AppDimensions.height(context) * 0.01),
-                    const AppTextField(
-                      hasIcon: true,
-                      icon: 'assets/icons/search.svg',
-                      hintText: 'Search Products',
+          body: model.isBusy
+              ? const AppLoader()
+              : SafeArea(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: AppDimensions.screenPadding(context),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(width: AppDimensions.width(context)),
+                          Text(category.capitalizeFirst,
+                              style: AppTextStyle.boldText24(context)),
+                          SizedBox(
+                              height: AppDimensions.height(context) * 0.01),
+                          const AppTextField(
+                            hasIcon: true,
+                            icon: 'assets/icons/search.svg',
+                            hintText: 'Search Products',
+                          ),
+                          SizedBox(
+                              height: AppDimensions.height(context) * 0.01),
+                          model.productsInCategory.isEmpty
+                              ? SizedBox(
+                                  height: AppDimensions.height(context) * 0.7,
+                                  child: Center(
+                                      child: Text(
+                                    'There are no products in this category',
+                                    style: AppTextStyle.mediumText16(context),
+                                  )),
+                                )
+                              : ProductGrid(products: model.productsInCategory)
+                        ],
+                      ),
                     ),
-                    SizedBox(height: AppDimensions.height(context) * 0.01),
-                    model.productsInCategory.isEmpty
-                        ? const Center(child: Text('You have no products'))
-                        : ProductGrid(products: model.productsInCategory)
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
         );
       },
     );

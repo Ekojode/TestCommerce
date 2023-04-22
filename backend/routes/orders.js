@@ -1,29 +1,119 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
+const Order = require("../models/orders");
+const Product = require("../models/products");
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
-  const order = req.body;
-  console.log(order);
-  res.status(201).json({
-    message: "order created successfully",
-    data: order,
+const validateProductsExist = async (req, res, next) => {
+  const productIds = req.body.products.map((product) => product.product);
+  try {
+    const products = await Product.find({ _id: { $in: productIds } });
+    if (products.length !== productIds.length) {
+      return res.status(400).json({
+        isSuccessful: false,
+        message: "Invalid product IDs",
+      });
+    }
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+router.post("/", validateProductsExist, (req, res) => {
+  const orderData = req.body;
+
+  const newOrder = new Order({
+    _id: new mongoose.Types.ObjectId(),
+    products: req.body.products,
+    total: req.body.total,
+    paymentRef: req.body.paymentRef,
   });
+
+  newOrder
+    .save()
+    .populate({
+      path: "products.product"
+    })
+    .then((order) => {
+      if (!order) {
+       return res.status(404).json({
+          isSuccessful: false,
+          message: "An error occurred",
+        });
+      }
+      res.status(200).json({
+        isSuccessful: true,
+        message: "Order created successfully",
+        data: order,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        isSuccessful: false,
+        message: err.message,
+        error: err,
+      });
+    });
 });
 
 router.get("/", (req, res) => {
-  res.status(201).json({
-    message: "Successful",
-    data: "All orders returned",
-  });
+  Order.find()
+  .populate({
+    path: "products.product"
+  })
+    .then((orders) => {
+      if (!orders) {
+       return res.status(404).json({
+          isSuccessful: false,
+          message: "Error retrieving Orders",
+        });
+      }
+      res.status(200).json({
+        isSuccessful: true,
+        message: "Orders retrieved successfully",
+        data: orders,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        isSuccessful: false,
+        message: err.message,
+        error: err,
+      });
+    });
 });
 
-router.get("/:orderId", (req, res) => {
+router.get("/:orderId", (req, res, next) => {
   const orderId = req.params.orderId;
-  res.status(201).json({
-    message: "order returned successfully",
-    data: `${orderId} returned successfully`,
-  });
+  Order.findById(orderId)
+    .populate({
+      path: "products.product",
+    })
+    .then((order) => {
+      if (!order) {
+       return res.status(404).json({
+          isSuccessful: false,
+          message: "Error finding order",
+        });
+      }
+
+      res.status(200).json({
+        isSuccessful: true,
+        message: "Order retrieved successfully",
+        data: order,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        isSuccessful: false,
+        message: err.message,
+        errror: err,
+      });
+    });
 });
 
 router.delete("/:orderId", (req, res) => {

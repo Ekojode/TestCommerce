@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/", (req, res, next) => {
   ProductModel.find()
+    .select("name price _id description category subCategory image")
     .then((products) => {
       res.status(200).json({
         isSuccessful: true,
@@ -22,11 +23,14 @@ router.get("/", (req, res, next) => {
     });
 });
 
+
+
 router.get("/:productId", async (req, res, next) => {
   const prodId = req.params.productId;
 
   try {
     const product = await ProductModel.findById(prodId);
+    console.log(product)
     if (!product) {
       return res.status(404).json({
         isSuccessful: false,
@@ -45,6 +49,17 @@ router.get("/:productId", async (req, res, next) => {
       message: err.message,
     });
   }
+});
+
+router.get("/", function (req, res) {
+  Product.distinct("category", function (error, categories) {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.json(categories);
+    }
+  });
 });
 
 router.get("/category/:category", (req, res) => {

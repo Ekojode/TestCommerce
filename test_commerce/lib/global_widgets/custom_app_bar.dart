@@ -28,7 +28,11 @@ AppBar customAppBarBack(
     leading: InkWell(
         onTap: leadingAction,
         child: Padding(
-          padding: EdgeInsets.all(AppDimensions.width(context) * 0.05),
+          padding: AppDimensions.width(context) < 300
+              ? EdgeInsets.all(AppDimensions.width(context) * 0.07)
+              : EdgeInsets.all(AppDimensions.isMobile(context)
+                  ? AppDimensions.width(context) * 0.05
+                  : AppDimensions.width(context) * 0.02),
           child: SvgPicture.asset(
             'assets/icons/back.svg',
           ),

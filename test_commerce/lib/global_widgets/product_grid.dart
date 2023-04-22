@@ -15,8 +15,8 @@ class ProductGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: products.length,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: AppDimensions.width(context) * 0.4,
-            childAspectRatio: 2 / 3,
+            maxCrossAxisExtent: AppDimensions.width(context) * 0.5,
+            childAspectRatio: 3 / 5,
             crossAxisSpacing: AppDimensions.width(context) * 0.02,
             mainAxisSpacing: AppDimensions.height(context) * 0.01),
         itemBuilder: (context, i) {

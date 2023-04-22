@@ -5,7 +5,7 @@ class AppNetworkImageWidget extends StatelessWidget {
   final double? width;
   final double? height;
   final bool? hasCircularBorder;
-  final String imgUrl;
+  final String? imgUrl;
   const AppNetworkImageWidget(
       {super.key,
       this.width = 100,
@@ -19,7 +19,8 @@ class AppNetworkImageWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(hasCircularBorder! ? 10 : 0),
       child: CachedNetworkImage(
         key: UniqueKey(),
-        imageUrl: imgUrl,
+        imageUrl: imgUrl ??
+            'https://content.asos-media.com/-/media/hubs/about-us/about-asos/feb-update/about-asos-1-new-size-asos_brands.jpg',
         alignment: Alignment.topCenter,
         fit: BoxFit.cover,
         placeholder: (context, url) => const Center(
