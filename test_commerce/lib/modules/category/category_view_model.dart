@@ -1,17 +1,21 @@
-import 'package:stacked_services/stacked_services.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/app.locator.dart';
 import '../../data/api/app_repository.dart';
 import '../../data/models/product_model.dart';
+import '../../data/services/cart_service.dart';
+import '../../utilities/utilities.dart';
 import '../custom_base_model.dart';
 
 class CategoryViewModel extends CustomBaseViewModel {
   final _appRepo = locator<AppRepositoryService>();
-  final _navigationService = locator<NavigationService>();
+  final _cartService = locator<CartService>();
+
   List<ProductModel> _productsInCategory = [];
 
   List<ProductModel> get productsInCategory => _productsInCategory;
-  NavigationService get navigationService => _navigationService;
+  bool get cartIsEmpty => _cartService.cart.keys.toList().isEmpty;
 
   Future<void> initialize(String category) async {
     setBusy(true);
@@ -25,5 +29,9 @@ class CategoryViewModel extends CustomBaseViewModel {
       _productsInCategory = response.data;
     }
     notifyListeners();
+  }
+
+  void viewProduct(String productId, BuildContext context) {
+    context.pushNamed(AppRouter.product, params: {'productId': productId});
   }
 }

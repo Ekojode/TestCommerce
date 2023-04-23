@@ -36,7 +36,9 @@ class HomeView extends StatelessWidget {
           body: model.isBusy
               ? const AppLoader()
               : RefreshIndicator(
-                  onRefresh: model.initialize,
+                  onRefresh: () async {
+                    model.initialize();
+                  },
                   child: SafeArea(
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -68,35 +70,40 @@ class HomeView extends StatelessWidget {
                                   children: [
                                     IconBox(
                                         onPressed: () =>
-                                            model.navigateToCategory('food'),
+                                            model.navigateToCategory(
+                                                'food', context),
                                         text: 'Food',
                                         color: AppColors.lightGreen,
                                         image:
                                             'assets/icons/category/vegetable.svg'),
                                     IconBox(
                                         onPressed: () =>
-                                            model.navigateToCategory('gift'),
+                                            model.navigateToCategory(
+                                                'gift', context),
                                         text: 'Gift',
                                         color: AppColors.lightOrange,
                                         image:
                                             'assets/icons/category/fruit.svg'),
                                     IconBox(
                                         onPressed: () =>
-                                            model.navigateToCategory('fashion'),
+                                            model.navigateToCategory(
+                                                'fashion', context),
                                         text: 'Fashion',
                                         color: AppColors.lightYellow,
                                         image:
                                             'assets/icons/category/eggs.svg'),
                                     IconBox(
                                         onPressed: () =>
-                                            model.navigateToCategory('gadget'),
+                                            model.navigateToCategory(
+                                                'gadget', context),
                                         text: 'Gadget',
                                         color: AppColors.lightPurple,
                                         image:
                                             'assets/icons/category/meat.svg'),
                                     IconBox(
-                                        onPressed: () => model
-                                            .navigateToCategory('computers'),
+                                        onPressed: () =>
+                                            model.navigateToCategory(
+                                                'computers', context),
                                         text: 'Computers',
                                         color: AppColors.lightGreen,
                                         image:
@@ -117,7 +124,12 @@ class HomeView extends StatelessWidget {
                                 ? const Center(
                                     child: Text('No Products Available'),
                                   )
-                                : ProductRowList(products: model.products),
+                                : ProductRowList(
+                                    products: model.products,
+                                    onPressed: (id) {
+                                      model.viewProduct(id, context);
+                                    },
+                                  ),
                             SizedBox(
                                 height: AppDimensions.height(context) * 0.01),
                             RowHeader(
@@ -128,7 +140,12 @@ class HomeView extends StatelessWidget {
                                 ? const Center(
                                     child: Text('No Products Available'),
                                   )
-                                : ProductRowList(products: model.products),
+                                : ProductRowList(
+                                    products: model.products,
+                                    onPressed: (id) {
+                                      model.viewProduct(id, context);
+                                    },
+                                  ),
                             SizedBox(
                                 height: AppDimensions.height(context) * 0.01),
                             RowHeader(
@@ -139,7 +156,12 @@ class HomeView extends StatelessWidget {
                                 ? const Center(
                                     child: Text('No Products Available'),
                                   )
-                                : ProductRowList(products: model.products),
+                                : ProductRowList(
+                                    products: model.products,
+                                    onPressed: (id) {
+                                      model.viewProduct(id, context);
+                                    },
+                                  ),
                             SizedBox(
                                 height: AppDimensions.height(context) * 0.01),
                             RowHeader(
@@ -150,7 +172,12 @@ class HomeView extends StatelessWidget {
                                 ? const Center(
                                     child: Text('No Products Available'),
                                   )
-                                : ProductRowList(products: model.products),
+                                : ProductRowList(
+                                    products: model.products,
+                                    onPressed: (id) {
+                                      model.viewProduct(id, context);
+                                    },
+                                  ),
                             SizedBox(
                                 height: AppDimensions.height(context) * 0.01),
                             RowHeader(
@@ -161,7 +188,12 @@ class HomeView extends StatelessWidget {
                                 ? const Center(
                                     child: Text('No Products Available'),
                                   )
-                                : ProductRowList(products: model.products),
+                                : ProductRowList(
+                                    products: model.products,
+                                    onPressed: (id) {
+                                      model.viewProduct(id, context);
+                                    },
+                                  ),
                             SizedBox(
                                 height: AppDimensions.height(context) * 0.01),
                           ],

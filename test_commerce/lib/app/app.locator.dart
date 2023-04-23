@@ -11,6 +11,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 
 import '../data/api/api_provider.dart';
 import '../data/api/app_repository.dart';
+import '../data/services/cart_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -26,4 +27,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => Api());
   locator.registerLazySingleton(() => AppRepositoryService());
+  locator.registerLazySingleton(() => CartService());
 }

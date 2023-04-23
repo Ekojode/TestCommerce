@@ -6,7 +6,9 @@ import 'product_widget.dart';
 
 class ProductGrid extends StatelessWidget {
   final List<ProductModel> products;
-  const ProductGrid({super.key, required this.products});
+  final Function(String) onPressed;
+  const ProductGrid(
+      {super.key, required this.products, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,12 @@ class ProductGrid extends StatelessWidget {
             mainAxisSpacing: AppDimensions.height(context) * 0.01),
         itemBuilder: (context, i) {
           final product = products[i];
-          return ProductWidget(product: product);
+          return ProductWidget(
+            product: product,
+            onPressed: () {
+              onPressed(product.id ?? '');
+            },
+          );
         });
   }
 }

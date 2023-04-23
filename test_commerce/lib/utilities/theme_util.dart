@@ -4,7 +4,8 @@ import 'color_utils.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
-    appBarTheme: const AppBarTheme(elevation: 2),
+    appBarTheme: const AppBarTheme(
+        elevation: 0.25, backgroundColor: AppColors.pureWhite),
     primaryColor: AppColors.blueOcean,
     primarySwatch: const MaterialColor(0XFF3669C9, customSwatch),
     scaffoldBackgroundColor: AppColors.pureWhite,

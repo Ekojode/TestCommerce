@@ -22,4 +22,12 @@ class AppRepositoryService {
     }
     return response;
   }
+
+  Future<ApiResponse> getSingleProduct(String productId) async {
+    final response = await _api.get('/products/$productId');
+    if (response.isSuccessful) {
+      response.data = ProductModel.fromJson(response.data);
+    }
+    return response;
+  }
 }

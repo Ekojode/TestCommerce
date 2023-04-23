@@ -1,19 +1,20 @@
-import 'package:stacked_services/stacked_services.dart';
-import 'package:test_commerce/app/app.router.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/app.locator.dart';
 import '../../data/api/app_repository.dart';
 import '../../data/models/product_model.dart';
+import '../../utilities/utilities.dart';
 import '../custom_base_model.dart';
 
 class HomeViewModel extends CustomBaseViewModel {
   final _appRepo = locator<AppRepositoryService>();
-  final _navigationService = locator<NavigationService>();
+
   List<ProductModel> _products = [];
 
   List<ProductModel> get products => _products;
 
-  Future<void> initialize() async {
+  void initialize() async {
     setBusy(true);
     await getProducts();
     setBusy(false);
@@ -28,7 +29,11 @@ class HomeViewModel extends CustomBaseViewModel {
     notifyListeners();
   }
 
-  void navigateToCategory(String category) {
-    _navigationService.navigateToCategoryView(category: category);
+  void navigateToCategory(String category, BuildContext context) {
+    context.goNamed(AppRouter.category, params: {'cat': category});
+  }
+
+  void viewProduct(String productId, BuildContext context) {
+    context.goNamed(AppRouter.product, params: {'productId': productId});
   }
 }

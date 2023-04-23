@@ -6,7 +6,9 @@ import 'widgets.dart';
 
 class ProductRowList extends StatelessWidget {
   final List<ProductModel> products;
-  const ProductRowList({super.key, required this.products});
+  final Function(String) onPressed;
+  const ProductRowList(
+      {super.key, required this.products, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,12 @@ class ProductRowList extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, i) {
             final product = products[i];
-            return ProductWidget(product: product);
+            return ProductWidget(
+              product: product,
+              onPressed: () {
+                onPressed(product.id ?? '');
+              },
+            );
           },
         ),
       ),

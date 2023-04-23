@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:go_router/go_router.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../global_widgets/widgets.dart';
 import '../../utilities/utilities.dart';
 import 'category_view_model.dart';
+import 'widgets/cart_bar.dart';
 
 class CategoryView extends StatelessWidget {
   final String category;
@@ -27,46 +29,49 @@ class CategoryView extends StatelessWidget {
               context: context,
               title: 'Category',
               actionWidgets: [
-                Padding(
-                  padding: AppDimensions.horizontalPadding(context),
-                  child: InkWell(
-                    child: SvgPicture.asset('assets/icons/shopping-cart.svg'),
-                  ),
-                )
+                const CartIcon(),
               ],
-              leadingAction: () => model.navigationService.back()),
+              leadingAction: () => context.pop()),
           body: model.isBusy
               ? const AppLoader()
-              : SafeArea(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: AppDimensions.screenPadding(context),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(width: AppDimensions.width(context)),
-                          Text(category.capitalizeFirst,
-                              style: AppTextStyle.boldText24(context)),
-                          SizedBox(
-                              height: AppDimensions.height(context) * 0.01),
-                          const AppTextField(
-                            hasIcon: true,
-                            icon: 'assets/icons/search.svg',
-                            hintText: 'Search Products',
-                          ),
-                          SizedBox(
-                              height: AppDimensions.height(context) * 0.01),
-                          model.productsInCategory.isEmpty
-                              ? SizedBox(
-                                  height: AppDimensions.height(context) * 0.7,
-                                  child: Center(
-                                      child: Text(
-                                    'There are no products in this category',
-                                    style: AppTextStyle.mediumText16(context),
-                                  )),
-                                )
-                              : ProductGrid(products: model.productsInCategory)
-                        ],
+              : RefreshIndicator(
+                  onRefresh: () async {},
+                  child: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: AppDimensions.screenPadding(context),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(width: AppDimensions.width(context)),
+                            Text(category.capitalizeFirst,
+                                style: AppTextStyle.boldText24(context)),
+                            SizedBox(
+                                height: AppDimensions.height(context) * 0.01),
+                            const AppTextField(
+                              hasIcon: true,
+                              icon: 'assets/icons/search.svg',
+                              hintText: 'Search Products',
+                            ),
+                            SizedBox(
+                                height: AppDimensions.height(context) * 0.01),
+                            model.productsInCategory.isEmpty
+                                ? SizedBox(
+                                    height: AppDimensions.height(context) * 0.7,
+                                    child: Center(
+                                        child: Text(
+                                      'There are no products in this category',
+                                      style: AppTextStyle.mediumText16(context),
+                                    )),
+                                  )
+                                : ProductGrid(
+                                    products: model.productsInCategory,
+                                    onPressed: (productId) {
+                                      model.viewProduct(productId, context);
+                                    },
+                                  )
+                          ],
+                        ),
                       ),
                     ),
                   ),
