@@ -11,3 +11,4 @@ export './product_row_list.dart';
 export './product_grid.dart';
 export './app_divider.dart';
 export './app_spacer.dart';
+export './app_cart_icon.dart';

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:stacked/stacked.dart';
 
-import '../../../utilities/utilities.dart';
-
+import '../../../global_widgets/widgets.dart';
 import '../product_view_model.dart';
 
 class PCartIcon extends ViewModelWidget<ProductViewModel> {
@@ -11,18 +10,7 @@ class PCartIcon extends ViewModelWidget<ProductViewModel> {
 
   @override
   Widget build(BuildContext context, ProductViewModel viewModel) {
-    return Center(
-      child: Padding(
-        padding: AppDimensions.horizontalPadding(context),
-        child: Badge(
-          isLabelVisible: !viewModel.cartIsEmpty,
-          smallSize: 8,
-          //backgroundColor: viewModel.cartIsEmpty ? AppColors.redVelvet : null,
-          child: InkWell(
-            child: SvgPicture.asset('assets/icons/shopping-cart.svg'),
-          ),
-        ),
-      ),
-    );
+    return AppCartIcon(
+        isVisible: !viewModel.cartIsEmpty, count: viewModel.cartCount);
   }
 }
