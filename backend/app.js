@@ -27,7 +27,7 @@ app.use("/orders", orderRoutes);
 app.use("/upload", uploadRoute);
 
 app.use((req, res, next) => {
-  const error = new Error("An error occurred");
+  const error = new Error("Test Commerce route doesn't exist");
   error.status = 404;
   next(error);
 });
@@ -35,9 +35,9 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
-    error: {
-      message: err.message,
-    },
+    isSucessful: false,
+    message: err.message,
+    error: err,
   });
 });
 

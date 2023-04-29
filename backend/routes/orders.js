@@ -23,7 +23,29 @@ const validateProductsExist = async (req, res, next) => {
   }
 };
 
-router.post("/", validateProductsExist, (req, res) => {
+const validateQuantityLimit = async (req, res, next) => {
+  const productIds = req.body.products.map((product) => product.product);
+  const productQuantities = req.body.products.map(
+    (product) => product.quantity
+  );
+  try {
+    const products = await Product.find({ _id: { $in: productIds } });
+    for (let i = 0; i < products.length; i++) {
+      if (productQuantities[i] > products[i].quantity) {
+        return res.status(400).json({
+          isSuccessful: false,
+          message: "Quantity ordered greated than products available",
+        });
+      }
+    }
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+router.post("/", validateProductsExist, validateQuantityLimit, (req, res) => {
   const orderData = req.body;
 
   const newOrder = new Order({
@@ -36,14 +58,42 @@ router.post("/", validateProductsExist, (req, res) => {
   newOrder
     .save()
     .populate({
-      path: "products.product"
+      path: "products.product",
     })
     .then((order) => {
       if (!order) {
-       return res.status(404).json({
+        return res.status(404).json({
           isSuccessful: false,
           message: "An error occurred",
         });
+      }
+      for (let i = 0; i < orderData.products.length; i++) {
+        const orderedProduct = orderData.products[i];
+        const productId = orderedProduct.product;
+        const orderedQuantity = orderedProduct.quantity;
+
+        // Find the product in the database
+        Product.findById(productId)
+          .then((product) => {
+            if (!product) {
+              return res.status(404).json({
+                isSuccessful: false,
+                message: "Product not found",
+              });
+            }
+
+            // Update the product quantity in the database
+            product.quantity = product.quantity - orderedQuantity;
+            product.save();
+          })
+          .catch((error) => {
+            console.error(error);
+            res.status(500).json({
+              isSuccessful: false,
+              message: "Internal server error",
+              error: error,
+            });
+          });
       }
       res.status(200).json({
         isSuccessful: true,
@@ -62,12 +112,12 @@ router.post("/", validateProductsExist, (req, res) => {
 
 router.get("/", (req, res) => {
   Order.find()
-  .populate({
-    path: "products.product"
-  })
+    .populate({
+      path: "products.product",
+    })
     .then((orders) => {
       if (!orders) {
-       return res.status(404).json({
+        return res.status(404).json({
           isSuccessful: false,
           message: "Error retrieving Orders",
         });
@@ -95,7 +145,7 @@ router.get("/:orderId", (req, res, next) => {
     })
     .then((order) => {
       if (!order) {
-       return res.status(404).json({
+        return res.status(404).json({
           isSuccessful: false,
           message: "Error finding order",
         });

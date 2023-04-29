@@ -119,6 +119,14 @@ router.patch("/:productId", (req, res, next) => {
 
 router.post("", (req, res, next) => {
   const newProdData = req.body;
+
+  if (newProdData.images.length === 0){
+    return res.status(500).json({
+      isSuccessful: false,
+      message:"Product images can't be empty"
+      
+    })
+  }
   const newProduct = new ProductModel({
     _id: new mongoose.Types.ObjectId(),
     name: newProdData.name,
@@ -126,7 +134,8 @@ router.post("", (req, res, next) => {
     description: newProdData.description,
     category: newProdData.category,
     subCategory: newProdData.subCategory,
-    image: newProdData.image,
+    images: newProdData.images,
+    quantity: newProdData.quantity
   });
 
   newProduct
