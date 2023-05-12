@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../global_widgets/widgets.dart';
 import '../../utilities/utilities.dart';
-import 'home_view_mode.dart';
+import 'home_view_model.dart';
 
 class HomeView extends ConsumerWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -19,10 +20,7 @@ class HomeView extends ConsumerWidget {
             color: AppColors.blueOcean,
             actionWidgets: [
               SvgPicture.asset('assets/icons/bell.svg'),
-              Padding(
-                padding: AppDimensions.horizontalPadding(context),
-                child: SvgPicture.asset('assets/icons/shopping-cart.svg'),
-              ),
+              const AppCartIcon()
             ]),
         body: products.when(
             data: (prods) => SafeArea(
@@ -55,28 +53,38 @@ class HomeView extends ConsumerWidget {
                                 physics: const BouncingScrollPhysics(),
                                 children: [
                                   IconBox(
-                                      onPressed: () {},
+                                      onPressed: () => context.goNamed(
+                                          AppRouter.category,
+                                          params: {'cat': 'food'}),
                                       text: 'Food',
                                       color: AppColors.lightGreen,
                                       image:
                                           'assets/icons/category/vegetable.svg'),
                                   IconBox(
-                                      onPressed: () {},
+                                      onPressed: () => context.goNamed(
+                                          AppRouter.category,
+                                          params: {'cat': 'gift'}),
                                       text: 'Gift',
                                       color: AppColors.lightOrange,
                                       image: 'assets/icons/category/fruit.svg'),
                                   IconBox(
-                                      onPressed: () {},
+                                      onPressed: () => context.goNamed(
+                                          AppRouter.category,
+                                          params: {'cat': 'fashion'}),
                                       text: 'Fashion',
                                       color: AppColors.lightYellow,
                                       image: 'assets/icons/category/eggs.svg'),
                                   IconBox(
-                                      onPressed: () {},
+                                      onPressed: () => context.goNamed(
+                                          AppRouter.category,
+                                          params: {'cat': 'gadget'}),
                                       text: 'Gadget',
                                       color: AppColors.lightPurple,
                                       image: 'assets/icons/category/meat.svg'),
                                   IconBox(
-                                      onPressed: () {},
+                                      onPressed: () => context.goNamed(
+                                          AppRouter.category,
+                                          params: {'cat': 'computers'}),
                                       text: 'Computers',
                                       color: AppColors.lightGreen,
                                       image:
@@ -94,7 +102,11 @@ class HomeView extends ConsumerWidget {
                           SizedBox(
                               height: AppDimensions.height(context) * 0.01),
                           ProductRowList(
-                              products: prods, onPressed: (prods) {}),
+                              products: prods,
+                              onPressed: (prod) {
+                                context.goNamed(AppRouter.productDetails,
+                                    params: {'productId': prod});
+                              }),
                           SizedBox(
                               height: AppDimensions.height(context) * 0.01),
                           RowHeader(
@@ -102,7 +114,11 @@ class HomeView extends ConsumerWidget {
                               actionText: 'See all',
                               onPressed: () {}),
                           ProductRowList(
-                              products: prods, onPressed: (prods) {}),
+                              products: prods,
+                              onPressed: (prod) {
+                                context.goNamed(AppRouter.productDetails,
+                                    params: {'productId': prod});
+                              }),
                           SizedBox(
                               height: AppDimensions.height(context) * 0.01),
                           RowHeader(
@@ -110,7 +126,11 @@ class HomeView extends ConsumerWidget {
                               actionText: 'See all',
                               onPressed: () {}),
                           ProductRowList(
-                              products: prods, onPressed: (prods) {}),
+                              products: prods,
+                              onPressed: (prod) {
+                                context.goNamed(AppRouter.productDetails,
+                                    params: {'productId': prod});
+                              }),
                           SizedBox(
                               height: AppDimensions.height(context) * 0.01),
                           RowHeader(
@@ -126,7 +146,11 @@ class HomeView extends ConsumerWidget {
                               actionText: 'See all',
                               onPressed: () {}),
                           ProductRowList(
-                              products: prods, onPressed: (prods) {}),
+                              products: prods,
+                              onPressed: (prod) {
+                                context.goNamed(AppRouter.productDetails,
+                                    params: {'productId': prod});
+                              }),
                           SizedBox(
                               height: AppDimensions.height(context) * 0.01),
                         ],

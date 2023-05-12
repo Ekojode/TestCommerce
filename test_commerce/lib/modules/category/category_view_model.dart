@@ -1,21 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../data/api/app_repository.dart';
 import '../../data/models/product_model.dart';
 
-import '../../utilities/utilities.dart';
+final categoryProductsProvider = AsyncNotifierProviderFamily<
+    CategoryProductsNotifier,
+    List<ProductModel>,
+    String>(CategoryProductsNotifier.new);
 
-class CategoryViewModel {
-  final List<ProductModel> _productsInCategory = [];
+class CategoryProductsNotifier
+    extends FamilyAsyncNotifier<List<ProductModel>, String> {
+  final api = AppRepositoryService();
 
-  List<ProductModel> get productsInCategory => _productsInCategory;
+  Future<List<ProductModel>> _fetchProducts(String category) async {
+    try {
+      final response = await api.getProductsByCategory(category);
 
-  Future<void> initialize(String category) async {}
+      return ProductModel.getProductList(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-  Future<void> getProductsInCategory(String category) async {}
-
-  void viewProduct(String productId, BuildContext context) {
-    context
-        .pushNamed(AppRouter.productDetails, params: {'productId': productId});
+  @override
+  FutureOr<List<ProductModel>> build(String arg) async {
+    return _fetchProducts(arg);
   }
 }

@@ -19,7 +19,7 @@ class Api {
     ),
   );
 
-  Future<Response> get(String endpoint,
+  Future<ApiResponse> get(String endpoint,
       {Map<String, dynamic>? queryParameters, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.get(
@@ -27,7 +27,7 @@ class Api {
         queryParameters: queryParameters,
         cancelToken: cancelToken,
       );
-      return response;
+      return ApiResponse.fromResponse(response);
     } on DioError catch (error) {
       _handleError(error);
       rethrow;
@@ -37,7 +37,7 @@ class Api {
     }
   }
 
-  Future<Response> post(String endpoint,
+  Future<ApiResponse> post(String endpoint,
       {required dynamic data, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.post(
@@ -45,7 +45,7 @@ class Api {
         data: jsonEncode(data),
         cancelToken: cancelToken,
       );
-      return response;
+      return ApiResponse.fromResponse(response);
     } on DioError catch (error) {
       _handleError(error);
       rethrow;
@@ -55,10 +55,10 @@ class Api {
     }
   }
 
-  Future<Response> patch(String endpoint, {required dynamic data}) async {
+  Future<ApiResponse> patch(String endpoint, {required dynamic data}) async {
     try {
       final response = await _dio.patch(endpoint, data: jsonDecode(data));
-      return response;
+      return ApiResponse.fromResponse(response);
     } on DioError catch (error) {
       _handleError(error);
       rethrow;
@@ -68,7 +68,7 @@ class Api {
     }
   }
 
-  Future<Response> put(String endpoint,
+  Future<ApiResponse> put(String endpoint,
       {required dynamic data, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.put(
@@ -76,7 +76,7 @@ class Api {
         data: jsonEncode(data),
         cancelToken: cancelToken,
       );
-      return response;
+      return ApiResponse.fromResponse(response);
     } on DioError catch (error) {
       _handleError(error);
       rethrow;
@@ -86,7 +86,7 @@ class Api {
     }
   }
 
-  Future<Response> delete(String endpoint,
+  Future<ApiResponse> delete(String endpoint,
       {required dynamic data, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.delete(
@@ -94,7 +94,7 @@ class Api {
         data: jsonEncode(data),
         cancelToken: cancelToken,
       );
-      return response;
+      return ApiResponse.fromResponse(response);
     } on DioError catch (error) {
       _handleError(error);
       rethrow;

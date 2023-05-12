@@ -17,7 +17,7 @@ class ProductNotifier extends AsyncNotifier<List<ProductModel>> {
 
       return ProductModel.getProductList(response.data);
     } catch (e) {
-      throw e.toString();
+      rethrow;
     }
   }
 
