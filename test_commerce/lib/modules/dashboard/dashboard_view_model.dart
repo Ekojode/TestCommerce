@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../account/account_view.dart';
-import '../custom_base_model.dart';
 import '../home/home_view.dart';
 import '../orders/orders_view.dart';
-import '../wishlist/wish_list_view.dart';
+import '../wishlist/wishlist_view.dart';
 
-class DashboardViewModel extends CustomBaseViewModel {
+class DashboardViewModel {
   int _selectedTab = 0;
-  final _dashboardPages = const [
+  static const dashboardPages = [
     HomeView(),
-    WishListView(),
+    WishlistView(),
     OrderView(),
     AccountView(),
   ];
 
   int get selectedTab => _selectedTab;
-  List<Widget> get dashboardPages => _dashboardPages;
 
   void updateSelectedTab(int i) {
     _selectedTab = i;
+  }
+}
+
+final dashboardProvider = ChangeNotifierProvider<DashboardNotifier>((ref) {
+  return DashboardNotifier();
+});
+
+class DashboardNotifier extends ChangeNotifier {
+  int _pageIndex = 0;
+
+  int get pageIndex => _pageIndex;
+
+  void updateIndex(i) {
+    _pageIndex = i;
     notifyListeners();
   }
 }

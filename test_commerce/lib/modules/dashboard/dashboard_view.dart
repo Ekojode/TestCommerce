@@ -1,42 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_widgets/widgets.dart';
 import 'dashboard_view_model.dart';
 import 'widgets/app_bottom_nav_bar.dart';
 
-class DashboardView extends StatelessWidget {
-  const DashboardView({Key? key}) : super(key: key);
+class DashboardView extends ConsumerWidget {
+  const DashboardView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<DashboardViewModel>.reactive(
-      viewModelBuilder: () => DashboardViewModel(),
-      builder: (
-        BuildContext context,
-        DashboardViewModel viewModel,
-        Widget? child,
-      ) {
-        return AppBaseView(
-          child: WillPopScope(
-            onWillPop: () async {
-              if (viewModel.selectedTab != 0) {
-                viewModel.updateSelectedTab(0);
-                return false;
-              } else {
-                return true;
-              }
-            },
-            child: Scaffold(
-              body: IndexedStack(
-                index: viewModel.selectedTab,
-                children: viewModel.dashboardPages,
-              ),
-              bottomNavigationBar: const AppBottomNavBar(),
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBaseView(
+      child: Scaffold(
+        body: Consumer(
+          builder: (context, ref, child) => IndexedStack(
+            index: ref.watch(dashboardProvider).pageIndex,
+            children: DashboardViewModel.dashboardPages,
           ),
-        );
-      },
+        ),
+        bottomNavigationBar: const AppBottomNavBar(),
+      ),
     );
   }
 }

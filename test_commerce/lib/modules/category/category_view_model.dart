@@ -1,39 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../app/app.locator.dart';
-import '../../data/api/app_repository.dart';
 import '../../data/models/product_model.dart';
 
 import '../../utilities/utilities.dart';
-import '../cart/cart_view_model.dart';
-import '../custom_base_model.dart';
 
-class CategoryViewModel extends CustomBaseViewModel {
-  final _appRepo = locator<AppRepositoryService>();
-  final _cartService = locator<CartViewModel>();
-
-  List<ProductModel> _productsInCategory = [];
+class CategoryViewModel {
+  final List<ProductModel> _productsInCategory = [];
 
   List<ProductModel> get productsInCategory => _productsInCategory;
-  bool get cartIsEmpty => _cartService.cart.keys.toList().isEmpty;
-  int get cartCount => _cartService.cart.keys.toList().length;
 
-  Future<void> initialize(String category) async {
-    setBusy(true);
-    await getProductsInCategory(category);
-    setBusy(false);
-  }
+  Future<void> initialize(String category) async {}
 
-  Future<void> getProductsInCategory(String category) async {
-    final response = await _appRepo.getProductsByCategory(category);
-    if (response.isSuccessful) {
-      _productsInCategory = response.data;
-    }
-    notifyListeners();
-  }
+  Future<void> getProductsInCategory(String category) async {}
 
   void viewProduct(String productId, BuildContext context) {
-    context.pushNamed(AppRouter.product, params: {'productId': productId});
+    context
+        .pushNamed(AppRouter.productDetails, params: {'productId': productId});
   }
 }

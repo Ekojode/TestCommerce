@@ -6,7 +6,7 @@ import '../modules/dashboard/dashboard_view.dart';
 import '../modules/product/product_view.dart';
 
 class AppRouter {
-  static const product = 'product';
+  static const productDetails = 'product';
   static const category = 'category';
 }
 
@@ -19,7 +19,7 @@ final GoRouter _router = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
-          name: AppRouter.product,
+          name: AppRouter.productDetails,
           path: 'product/:productId',
           builder: (BuildContext context, GoRouterState state) {
             return ProductView(productId: state.params['productId']!);

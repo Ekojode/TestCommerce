@@ -52,6 +52,25 @@ class ApiResponse {
   }
 }
 
+class NewApiError {
+  final String message;
+  final int statusCode;
+
+  NewApiError(this.message, this.statusCode);
+
+  factory NewApiError.fromObject(dynamic object) {
+    final errorMessage =
+        object['message'] as String? ?? 'Unknown error occurred';
+    final statusCode = object['statusCode'] as int? ?? 0;
+    return NewApiError(errorMessage, statusCode);
+  }
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
 extension ApiError on DioError {
   ApiResponse toApiError({CancelToken? cancelToken}) {
     ApiResponse apiResponse = ApiResponse(isSuccessful: false);

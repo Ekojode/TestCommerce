@@ -19,7 +19,7 @@ class Api {
     ),
   );
 
-  Future<ApiResponse> get(String endpoint,
+  Future<Response> get(String endpoint,
       {Map<String, dynamic>? queryParameters, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.get(
@@ -27,13 +27,17 @@ class Api {
         queryParameters: queryParameters,
         cancelToken: cancelToken,
       );
-      return ApiResponse.fromResponse(response);
+      return response;
     } on DioError catch (error) {
-      return error.toApiError(cancelToken: cancelToken);
+      _handleError(error);
+      rethrow;
+    } catch (e) {
+      _handleError2(e);
+      rethrow;
     }
   }
 
-  Future<ApiResponse> post(String endpoint,
+  Future<Response> post(String endpoint,
       {required dynamic data, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.post(
@@ -41,22 +45,30 @@ class Api {
         data: jsonEncode(data),
         cancelToken: cancelToken,
       );
-      return ApiResponse.fromResponse(response);
+      return response;
     } on DioError catch (error) {
-      return error.toApiError(cancelToken: cancelToken);
+      _handleError(error);
+      rethrow;
+    } catch (e) {
+      _handleError2(e);
+      rethrow;
     }
   }
 
-  Future<ApiResponse> patch(String endpoint, {required dynamic data}) async {
+  Future<Response> patch(String endpoint, {required dynamic data}) async {
     try {
       final response = await _dio.patch(endpoint, data: jsonDecode(data));
-      return ApiResponse.fromResponse(response);
+      return response;
     } on DioError catch (error) {
-      return error.toApiError(cancelToken: CancelToken());
+      _handleError(error);
+      rethrow;
+    } catch (e) {
+      _handleError2(e);
+      rethrow;
     }
   }
 
-  Future<ApiResponse> put(String endpoint,
+  Future<Response> put(String endpoint,
       {required dynamic data, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.put(
@@ -64,13 +76,17 @@ class Api {
         data: jsonEncode(data),
         cancelToken: cancelToken,
       );
-      return ApiResponse.fromResponse(response);
+      return response;
     } on DioError catch (error) {
-      return error.toApiError(cancelToken: cancelToken);
+      _handleError(error);
+      rethrow;
+    } catch (e) {
+      _handleError2(e);
+      rethrow;
     }
   }
 
-  Future<ApiResponse> delete(String endpoint,
+  Future<Response> delete(String endpoint,
       {required dynamic data, CancelToken? cancelToken}) async {
     try {
       final response = await _dio.delete(
@@ -78,9 +94,33 @@ class Api {
         data: jsonEncode(data),
         cancelToken: cancelToken,
       );
-      return ApiResponse.fromResponse(response);
+      return response;
     } on DioError catch (error) {
-      return error.toApiError(cancelToken: cancelToken);
+      _handleError(error);
+      rethrow;
     }
+  }
+
+  void _handleError(DioError error) {
+    if (error.response != null) {
+      final statusCode = error.response!.statusCode;
+      //  final errorMessage = _getErrorMessageFromResponse(error.response!);
+      throw NewApiError(
+          error.message ?? 'An error occurred', statusCode ?? 404);
+    } else if (error.type == DioErrorType.connectionTimeout) {
+      throw NewApiError('Connection timeout occurred', 0);
+    } else if (error.type == DioErrorType.sendTimeout) {
+      throw NewApiError('Request send timeout occurred', 0);
+    } else if (error.type == DioErrorType.receiveTimeout) {
+      throw NewApiError('Response timeout occurred', 0);
+    } else if (error.type == DioErrorType.cancel) {
+      throw NewApiError('Request was cancelled', 0);
+    } else {
+      throw NewApiError('Network error occurred', 0);
+    }
+  }
+
+  void _handleError2(e) {
+    throw NewApiError(e.toString(), 0);
   }
 }

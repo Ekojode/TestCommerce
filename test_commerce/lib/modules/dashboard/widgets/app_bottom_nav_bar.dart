@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stacked/stacked.dart';
 
 import '../../../utilities/utilities.dart';
 import '../dashboard_view_model.dart';
 
-class AppBottomNavBar extends ViewModelWidget<DashboardViewModel> {
+class AppBottomNavBar extends ConsumerWidget {
   const AppBottomNavBar({super.key});
 
   @override
-  Widget build(BuildContext context, DashboardViewModel viewModel) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       height: AppDimensions.height(context) * 0.1,
       child: BottomNavigationBar(
@@ -69,8 +69,10 @@ class AppBottomNavBar extends ViewModelWidget<DashboardViewModel> {
               ),
               label: 'LOGIN'),
         ],
-        onTap: (i) => viewModel.updateSelectedTab(i),
-        currentIndex: viewModel.selectedTab,
+        onTap: (i) {
+          ref.read(dashboardProvider.notifier).updateIndex(i);
+        },
+        currentIndex: ref.watch(dashboardProvider).pageIndex,
         selectedItemColor: AppColors.blueOcean,
         unselectedItemColor: AppColors.textBlack,
       ),
